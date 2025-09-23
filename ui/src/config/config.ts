@@ -17,15 +17,17 @@ export interface AppConfig {
   };
   ui: {
     defaultImages: {
-      fashion: string;
+      hardware: string;
     };
     categories: {
-      beauty: string;
-      fashion: string;
-      grocery: string;
-      office: string;
-      lifestyle: string;
-      lastCall: string;
+      hardware: string;
+      software: string;
+      solutions: string;
+      services: string;
+      industries: string;
+      partners: string;
+      insights: string;
+      why: string;
     };
   };
   features: {
@@ -58,15 +60,17 @@ const getConfig = (): AppConfig => {
     },
     ui: {
       defaultImages: {
-        fashion: "/images/splash.jpg",
+        hardware: "/images/splash.jpg",
       },
       categories: {
-        beauty: "BEAUTY AND WELLNESS",
-        fashion: "FASHION",
-        grocery: "GROCERY",
-        office: "OFFICE",
-        lifestyle: "LIFESTYLE",
-        lastCall: "LAST CALL!"
+        hardware: "Hardware",
+        software: "Software",
+        solutions: "Solutions",
+        services: "Services",
+        industries: "Industries",
+        partners: "Partners",
+        insights: "Insights",
+        why: "Why CDW"
       }
     },
     features: {
@@ -90,10 +94,10 @@ export const getApiUrl = (endpoint: keyof AppConfig['api']['endpoints']): string
   return `${config.api.baseUrl}${config.api.endpoints[endpoint]}`;
 };
 
-export const isFashionMode = (): boolean => {
+export const isHardwareMode = (): boolean => {
   return true; // Always return true - always fashion mode
 };
 
 export const getDefaultImage = (): string => {
-  return config.ui.defaultImages.fashion; // Always use fashion image
+  return config.ui.defaultImages.hardware; // Always use fashion image
 }; 

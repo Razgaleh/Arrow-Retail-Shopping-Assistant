@@ -21,7 +21,7 @@
 
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { config, isFashionMode } from "../config/config";
+import { config, isHardwareMode } from "../config/config";
 
 const Navbar: React.FC = () => {
   const categories = config.ui.categories;
@@ -32,8 +32,8 @@ const Navbar: React.FC = () => {
   };
 
   const isCategoryActive = (categoryKey: keyof typeof categories): boolean => {
-    // Only fashion is active
-    return categoryKey === 'fashion';
+    // Only hardware is active
+    return categoryKey === 'hardware';
   };
 
   return (
@@ -43,8 +43,8 @@ const Navbar: React.FC = () => {
         {/* Left side - Menu and Brand */}
         <div className="flex items-center shrink-0">
           <MenuIcon sx={{ color: "#5E5E5E" }} fontSize="small" />
-          <p className="text-[22px] ml-[20px] font-bold text-[#202020]">
-            Avanzare
+          <p className="text-[22px] ml-[20px] font-bold text-[#CC0000]">
+            CDW 
           </p>
         </div>
         
@@ -57,66 +57,60 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Categories bar */}
-      <div className="bg-[#F2F2F2] mt-[1px] h-[57px] text-white px-3 py-2 lg:px-8 flex items-center gap-8">
-        {/* Beauty and Wellness */}
-        <div className="flex items-center hover:underline">
-          <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.beauty}
-          </p>
-        </div>
-
-        {/* Fashion - Always Active */}
+      <div className="bg-[#F2F2F2] mt-[1px] h-[57px] text-white px-3 py-2 lg:px-8 flex items-center gap-4 overflow-x-auto whitespace-nowrap">
+        {/* Hardware - Always Active */}
         <div className="flex items-center">
           <p className="text-[15px] font-medium text-[#000] underline">
-            {categories.fashion}
+            {categories.hardware}
           </p>
         </div>
 
-        {/* Remove Home Goods section entirely */}
-        {/* 
-<div 
-  className="flex items-center" 
-  style={{ 
-    textDecoration: isCategoryActive('homeGoods') ? 'underline' : 'none',
-    pointerEvents: isCategoryActive('homeGoods') ? 'none' : 'auto'
-  }}
->
-  <a 
-    className="text-[15px] font-medium hover:underline" 
-    style={{ 
-      color: isCategoryActive('homeGoods') ? "#000" : "#666" 
-    }}
-  >
-    {categories.homeGoods}
-  </a>
-</div>
-*/}
-
-        {/* Grocery */}
+        {/* Software */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.grocery}
+            {categories.software}
           </p>
         </div>
 
-        {/* Office */}
+        {/* Solutions */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.office}
+            {categories.solutions}
           </p>
         </div>
 
-        {/* Lifestyle */}
+        {/* Services */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.lifestyle}
+            {categories.services}
           </p>
         </div>
 
-        {/* Last Call */}
+        {/* Industries */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.lastCall}
+            {categories.industries}
+          </p>
+        </div>
+
+        {/* Partners */}
+        <div className="flex items-center hover:underline">
+          <p className="text-[15px] text-[#666] font-medium hover:underline">
+            {categories.partners}
+          </p>
+        </div>
+
+        {/* Insights */}
+        <div className="flex items-center hover:underline">
+          <p className="text-[15px] text-[#666] font-medium hover:underline">
+            {categories.insights}
+          </p>
+        </div>
+
+        {/* Why CDW */}
+        <div className="flex items-center hover:underline">
+          <p className="text-[15px] text-[#666] font-medium hover:underline">
+            {categories.why}
           </p>
         </div>
       </div>
