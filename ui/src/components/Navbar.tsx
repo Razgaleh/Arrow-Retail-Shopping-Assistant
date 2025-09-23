@@ -22,6 +22,7 @@
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { config, isHardwareMode } from "../config/config";
+import logo from "../assets/CDW-Logo.png";
 
 const Navbar: React.FC = () => {
   const categories = config.ui.categories;
@@ -39,13 +40,15 @@ const Navbar: React.FC = () => {
   return (
     <div>
       {/* Main navigation bar */}
-      <div className="bg-[#FFFFFF] h-[48px] px-3 py-2 lg:px-5 text-white flex justify-between items-center">
+      <div className="bg-[#FFFFFF] h-[60px] px-3 py-2 lg:px-5 text-white flex justify-between items-center">
         {/* Left side - Menu and Brand */}
         <div className="flex items-center shrink-0">
-          <MenuIcon sx={{ color: "#5E5E5E" }} fontSize="small" />
-          <p className="text-[22px] ml-[20px] font-bold text-[#CC0000]">
-            CDW 
-          </p>
+          <MenuIcon sx={{ color: "#5E5E5E" }} fontSize="small"/>
+          {/* <p className="text-[22px] ml-[20px] font-bold text-[#202020]">
+            CDW
+          </p> */}
+          <img src={logo} alt="logo" width={100} height={100} style={{ paddingLeft: "12px" }}/>
+          
         </div>
         
         {/* Right side - Welcome message */}
