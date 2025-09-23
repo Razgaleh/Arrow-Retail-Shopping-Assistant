@@ -464,7 +464,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             {/* Action buttons */}
             <div className="button-class">
               <SendIcon
-                sx={{ color: isLoading ? "lightgray" : "#76B900", cursor: isLoading ? "not-allowed" : "pointer" }}
+                sx={{ color: isLoading ? "lightgray" : "#CC0000", cursor: isLoading ? "not-allowed" : "pointer" }}
                 onClick={isLoading ? () => {} : handleSendMessage}
                 fontSize="large"
               />
@@ -472,7 +472,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             
             <div className="button-class">
               <CancelIcon
-                sx={{ color: "#76B900" }}
+                sx={{ color: "#CC0000" }}
                 onClick={handleReset}
                 fontSize="large"
               />
@@ -481,7 +481,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             <div className="button-class" style={{ transform: "rotate(180deg)" }}>
               <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
                 <DownloadIcon
-                  sx={{ color: "#76B900" }}
+                  sx={{ color: "#CC0000" }}
                   fontSize="large"
                 />
               </label>
