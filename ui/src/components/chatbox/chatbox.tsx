@@ -358,7 +358,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     // Add welcome messages
     addMessage(
       "system",
-      "You are an advanced AI assistant helps customers on a Retail e-commerce website. You help answer questions for customers about products. Start the conversation by asking a couple of questions to clarify what the user is looking for. Use emojis but do not use too many. Structure your output using Markdown but do not use nested indentations.",
+      "You are an advanced AI assistant helps customers on a technology reseller website. You help answer questions for customers about products. Start the conversation by asking a couple of questions to clarify what the user is looking for. Use emojis but do not use too many. Structure your output using Markdown but do not use nested indentations.",
       ""
     );
     
@@ -366,7 +366,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     addMessage("assistant", "", "");
     
     await sleep(1000);
-    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by NVIDIA. You can ask me anything—from finding the perfect item to learning more about product care.\n\nHere are some questions you could ask me:\n\n• Do you have any summer skirts?\n• Does the [product name] require dry cleaning?\n• Do you have any shoes like this? (upload an image)\n• Great! Add it to my cart";
+    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by NVIDIA x CDW hosted on Arrow Electronics AI Solutions Lab. You can ask me anything—from finding the perfect item to learning more about product care.\n\nHere are some questions you could ask me:\n\n• Do you have any NVIDIA GPUs for AI Workloads?\n• Does the [product name] require liquid cooling in a data center?\n• Do you have any laptops like this? (upload an image)\n• Great! Add it to my cart.";
     
     const words = introduction.split(" ");
     for (const word of words) {
