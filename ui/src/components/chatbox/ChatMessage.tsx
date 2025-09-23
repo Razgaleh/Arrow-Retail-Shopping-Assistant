@@ -24,7 +24,7 @@ import Showdown from "showdown";
 import SafeHTML from "./SafeHTML";
 import Loader from "./Loader";
 import { ChatMessageProps, MessageRole, ImageContent, ImageRowContent } from "../../types";
-import { isFashionMode } from "../../config/config";
+import { isHardwareMode } from "../../config/config";
 import nvinfo from "../../assets/nvinfo.jpg";
 
 const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
@@ -140,7 +140,7 @@ const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
                 <div 
                   className="messages__item--image-stars" 
                   style={{
-                    maxWidth: isFashionMode() ? "200px" : "none"
+                    maxWidth: isHardwareMode() ? "200px" : "none"
                   }}
                 >
                   {image.productName}

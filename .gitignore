@@ -48,3 +48,5 @@ Thumbs.db
 # Environment variables
 .env
 .env.local 
+
+ui/node_modules
