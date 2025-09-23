@@ -41,10 +41,10 @@ import cdwlogo from "../../assets/CDW-Logo.png"
 // Custom styled switch component
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   '& .MuiSwitch-switchBase.Mui-checked': {
-    color: '#76b900',
+    color: '#0073ffff',
   },
   '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#a3bf73',
+    backgroundColor: '#85b9f9ff',
   },
   '& .MuiSwitch-track': {
     backgroundColor: 'lightgray',
@@ -464,7 +464,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             {/* Action buttons */}
             <div className="button-class">
               <SendIcon
-                sx={{ color: isLoading ? "lightgray" : "#CC0000", cursor: isLoading ? "not-allowed" : "pointer" }}
+                sx={{ color: isLoading ? "lightgray" : "#0073ffff", cursor: isLoading ? "not-allowed" : "pointer" }}
                 onClick={isLoading ? () => {} : handleSendMessage}
                 fontSize="large"
               />
@@ -472,7 +472,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             
             <div className="button-class">
               <CancelIcon
-                sx={{ color: "#CC0000" }}
+                sx={{ color: "#0073ffff" }}
                 onClick={handleReset}
                 fontSize="large"
               />
@@ -481,7 +481,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             <div className="button-class" style={{ transform: "rotate(180deg)" }}>
               <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
                 <DownloadIcon
-                  sx={{ color: "#CC0000" }}
+                  sx={{ color: "#0073ffff" }}
                   fontSize="large"
                 />
               </label>
