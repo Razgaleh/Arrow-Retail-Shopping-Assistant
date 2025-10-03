@@ -12,7 +12,7 @@ name_column = "ProductName"
 # Get unique values
 unique_df = df.drop_duplicates(subset=[image_column])[[name_column, image_column]]
 
-output_dir = "../shared/cdw_images"
+output_dir = "./shared/images"
 
 os.makedirs(output_dir, exist_ok=True)
 
