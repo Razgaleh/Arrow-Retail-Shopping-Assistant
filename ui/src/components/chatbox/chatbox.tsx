@@ -32,7 +32,8 @@ import { ChatboxProps } from "../../types";
 import { config } from "../../config/config";
 import { showCartNotification } from "../../utils";
 import logo from "../../assets/nvidia-logo.png";
-import cdwlogo from "../../assets/CDW-Logo.png"
+import cdwlogo from "../../assets/CDW-Logo.png";
+import arrowlogo from "../../assets/arrow_logo.png";
 
 /**
  * Main chatbox component for the shopping assistant
@@ -517,6 +518,8 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             <img src={logo} alt="NVIDIA" className="h-14" />
             <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px" }}> x </h3>
             <img src={cdwlogo} alt="cdwlogo" className="h-14" />
+            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", marginLeft: "12px" }}> x </h3>
+            <img src={arrowlogo} alt="arrowlogo" className="h-14" style={{width: "100px", height: "auto"}} />
           </div>
         </div>
 
