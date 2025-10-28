@@ -1,0 +1,23 @@
+2025-10-28 13:31:55,536 - INFO - Starting CDW Data Cleaning Pipeline...
+2025-10-28 13:31:55,536 - INFO - Loading dataset from Product_Dataset_wImages.csv
+2025-10-28 13:31:55,568 - WARNING - Failed to load with utf-8 encoding, trying next...
+2025-10-28 13:31:55,633 - INFO - Successfully loaded dataset with latin-1 encoding
+2025-10-28 13:31:55,633 - INFO - Loaded 6000 rows with 34 columns
+2025-10-28 13:31:55,633 - INFO - Starting image download process...
+2025-10-28 13:31:55,645 - INFO - Found 49 unique products by ProductName
+2025-10-28 13:31:55,647 - INFO - Found 43 unique images to download (only for unique ProductNames)
+2025-10-28 13:31:57,217 - INFO - Image download completed!
+2025-10-28 13:31:57,217 - INFO - Download statistics: {'total_images': 43, 'downloaded': 43, 'failed': 0, 'skipped': 0}
+2025-10-28 13:31:57,217 - INFO - Updating ImageUrl column to local paths...
+2025-10-28 13:31:57,222 - INFO - Updated 1277 image URLs to local paths
+2025-10-28 13:31:57,222 - INFO - Identifying unique products with unique images...
+2025-10-28 13:31:57,228 - INFO - Found 49 unique products by ProductName
+2025-10-28 13:31:57,228 - INFO - Found 43 unique products with images
+2025-10-28 13:31:57,228 - INFO - Generating analysis report...
+2025-10-28 13:31:57,232 - INFO - Saving cleaned dataset to cleaned_product_dataset.csv
+2025-10-28 13:31:57,369 - INFO - Cleaned dataset saved with 6000 rows
+2025-10-28 13:31:57,369 - INFO - Saving unique products dataset to unique_products_with_images.csv
+2025-10-28 13:31:57,370 - INFO - Unique products dataset saved with 43 rows
+2025-10-28 13:31:57,370 - INFO - Saving analysis report to data_analysis_report.json
+2025-10-28 13:31:57,371 - INFO - Analysis report saved
+2025-10-28 13:31:57,371 - INFO - Data cleaning pipeline completed successfully!
