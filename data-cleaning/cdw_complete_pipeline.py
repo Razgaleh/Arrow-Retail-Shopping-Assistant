@@ -167,6 +167,129 @@ class CDWDataProcessor:
         
         return text
     
+    def detect_keyboard_or_mouse(self, row) -> Optional[str]:
+        """Detect if a product is a keyboard or mouse based on name, category, and description"""
+        def safe_str(value, default=''):
+            """Safely convert value to string, handling NaN"""
+            if pd.isna(value):
+                return default
+            return str(value).lower()
+        
+        product_name = safe_str(row.get('ProductName', ''))
+        category = safe_str(row.get('WebTaxonomyTopLevelName', ''))
+        subcategory = safe_str(row.get('WebTaxonomySubLevel1Name', ''))
+        logistics_category = safe_str(row.get('LogisticsTaxonomyClassName', ''))
+        logistics_group = safe_str(row.get('LogisticsTaxonomyGroupName', ''))
+        description = safe_str(row.get('ProductLongTitle', '')) + ' ' + safe_str(row.get('MarketingText', ''))
+        
+        # Keywords for keyboard detection
+        keyboard_keywords = ['keyboard', 'kb ', 'keypad', 'mechanical keyboard', 'wireless keyboard', 
+                            'wired keyboard', 'gaming keyboard', 'ergonomic keyboard']
+        # Exclude mouse-related keywords in keyboard context
+        keyboard_exclude = ['mouse', 'trackball', 'track pad']
+        
+        # Keywords for mouse detection
+        mouse_keywords = ['mouse', 'trackball', 'trackball mouse', 'wireless mouse', 
+                         'wired mouse', 'gaming mouse', 'optical mouse', 'laser mouse']
+        # Exclude keyboard-related keywords in mouse context
+        mouse_exclude = ['keyboard', 'keypad']
+        
+        # Check if product name contains keyboard keywords (excluding mouse context)
+        is_keyboard = False
+        is_mouse = False
+        
+        # Check for bundle products - these should remain in Computer Accessories
+        # Only check product name for bundle keywords, not description (to avoid false positives)
+        if 'bundle' in product_name or 'combo' in product_name or 'cmbo' in product_name:
+            return None  # Bundle products remain in their original category
+        # Check if product name contains both keyboard and mouse (actual bundle)
+        if 'keyboard' in product_name and 'mouse' in product_name:
+            return None  # Bundle products remain in their original category
+        
+        # Check for keyboard - prioritize product name over subcategory
+        for keyword in keyboard_keywords:
+            if keyword in product_name:
+                # Make sure it's not a mouse-related product
+                if not any(exclude in product_name for exclude in keyboard_exclude):
+                    is_keyboard = True
+                    break
+            elif keyword in subcategory or keyword in logistics_category or keyword in description:
+                # Only check subcategory/description if not already detected from product name
+                if not is_mouse and not any(exclude in product_name for exclude in keyboard_exclude):
+                    is_keyboard = True
+                    break
+        
+        # Check for mouse - prioritize product name over subcategory
+        for keyword in mouse_keywords:
+            if keyword in product_name:
+                # Make sure it's not a keyboard-related product
+                if not any(exclude in product_name for exclude in mouse_exclude):
+                    is_mouse = True
+                    break
+            elif keyword in subcategory or keyword in logistics_category or keyword in description:
+                # Only check subcategory/description if not already detected from product name
+                if not is_keyboard and not any(exclude in product_name for exclude in mouse_exclude):
+                    is_mouse = True
+                    break
+        
+        # Additional checks based on category fields
+        if 'keyboard' in category and 'mouse' not in category:
+            is_keyboard = True
+        elif 'keyboard' in subcategory and 'mouse' not in subcategory:
+            is_keyboard = True
+        elif 'keyboard' in logistics_category and 'mouse' not in logistics_category:
+            is_keyboard = True
+        elif 'keyboard' in logistics_group and 'mouse' not in logistics_group:
+            is_keyboard = True
+        
+        if 'mouse' in category and 'keyboard' not in category:
+            is_mouse = True
+        elif 'mouse' in subcategory and 'keyboard' not in subcategory:
+            is_mouse = True
+        elif 'mouse' in logistics_category and 'keyboard' not in logistics_category:
+            is_mouse = True
+        elif 'mouse' in logistics_group and 'keyboard' not in logistics_group:
+            is_mouse = True
+        
+        # Special handling for products that mention both - prioritize product name over subcategory
+        if is_keyboard and is_mouse:
+            # If product name clearly indicates one type, prioritize that
+            if 'mouse' in product_name and 'keyboard' not in product_name:
+                return 'Mice'
+            elif 'keyboard' in product_name and 'mouse' not in product_name:
+                return 'Keyboards'
+            # If both in product name, check which is more prominent
+            keyboard_count = sum(1 for kw in keyboard_keywords if kw in product_name)
+            mouse_count = sum(1 for kw in mouse_keywords if kw in product_name)
+            if keyboard_count > mouse_count:
+                return 'Keyboards'
+            elif mouse_count > keyboard_count:
+                return 'Mice'
+            elif keyboard_count == mouse_count and keyboard_count > 0:
+                # If equal counts in product name, check which appears first
+                if 'keyboard' in product_name and 'mouse' in product_name:
+                    if product_name.find('keyboard') < product_name.find('mouse'):
+                        return 'Keyboards'
+                    else:
+                        return 'Mice'
+            # If product name doesn't clearly indicate, check subcategory
+            keyboard_count_sub = sum(1 for kw in keyboard_keywords if kw in subcategory or kw in logistics_category)
+            mouse_count_sub = sum(1 for kw in mouse_keywords if kw in subcategory or kw in logistics_category)
+            if mouse_count_sub > keyboard_count_sub:
+                return 'Mice'
+            elif keyboard_count_sub > mouse_count_sub:
+                return 'Keyboards'
+            # Otherwise, don't categorize (keep original category)
+            return None
+        
+        # Return the detected type
+        if is_keyboard and not is_mouse:
+            return 'Keyboards'
+        elif is_mouse and not is_keyboard:
+            return 'Mice'
+        else:
+            return None
+    
     def generate_realistic_price(self, category, brand, product_name):
         """Generate realistic prices based on category, brand, and product type"""
         
@@ -175,9 +298,11 @@ class CDWDataProcessor:
         
         # Price ranges by category
         category_ranges = {
+            'Keyboards': (20, 200),
+            'Mice': (15, 150),
             'Computer Accessories': (15, 150),
             'Computers': (800, 3000),
-            'Computer Monitors & Displays': (200, 800),
+            'Monitors': (200, 800),
             'Office Equipment & Supplies': (10, 100),
             'Electronics': (50, 500),
             'Do Not Use': (20, 200)  # Default range
@@ -407,11 +532,18 @@ class CDWDataProcessor:
             # Combine description parts
             item_description = '. '.join(description_parts)
             
+            # Check if product is a keyboard or mouse for subcategory purposes
+            keyboard_or_mouse = self.detect_keyboard_or_mouse(row)
+            
             # Get category - use WebTaxonomyTopLevelName as primary category
             category = self.clean_text(row.get('WebTaxonomyTopLevelName', ''))
             if not category:
                 category = self.clean_text(row.get('LogisticsTaxonomyTypeName', ''))
-            if not category:
+            
+            # Set keyboards and mice to Computer Accessories category
+            if keyboard_or_mouse:
+                category = "Computer Accessories"
+            elif not category:
                 category = "Computer Accessories"  # Default category
             
             # Get brand/manufacturer
@@ -420,11 +552,19 @@ class CDWDataProcessor:
             # Generate realistic price
             price = self.generate_realistic_price(category, brand, self.clean_text(row['ProductName']))
             
-            # Get subcategory
-            subcategory = self.clean_text(row.get('WebTaxonomySubLevel1Name', ''))
-            if not subcategory:
-                subcategory = self.clean_text(row.get('LogisticsTaxonomyClassName', ''))
-            if not subcategory:
+            # Get subcategory from source data
+            source_subcategory = self.clean_text(row.get('WebTaxonomySubLevel1Name', ''))
+            if not source_subcategory:
+                source_subcategory = self.clean_text(row.get('LogisticsTaxonomyClassName', ''))
+            
+            # Override subcategory for keyboards and mice - prioritize detection over source data
+            if keyboard_or_mouse == 'Keyboards':
+                subcategory = "Keyboards"
+            elif keyboard_or_mouse == 'Mice':
+                subcategory = "Mice"
+            elif source_subcategory:
+                subcategory = source_subcategory
+            else:
                 subcategory = "General"  # Default subcategory
             
             # Get product URL
