@@ -367,7 +367,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     addMessage("assistant", "", "");
     
     await sleep(1000);
-    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by NVIDIA x CDW hosted on Arrow Electronics AI Solutions Lab. You can ask me anything—from finding the perfect item to learning more about product care.\n\nHere are some questions you could ask me:\n\n• Do you have any NVIDIA GPUs for AI Workloads?\n• Does the [product name] require liquid cooling in a data center?\n• Do you have any laptops like this? (upload an image)\n• Great! Add it to my cart.";
+    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by NVIDIA x CDW hosted on Arrow's AI Experience Center. You can ask me anything—from finding the perfect item to learning more about product features.\n\nHere are some example questions you could ask me:\n\n• Do you have any ergonomic keyboards?\n• Do you have any mice like this? (upload an image)\n• Add [product name] to my cart.\n• What is the total price of my cart?";
     
     const words = introduction.split(" ");
     for (const word of words) {
@@ -408,7 +408,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
           {/* Header */}
           <div className="chatbox__header">
             <h4 className="chatbox__heading--header">
-              Retail Shopping Assistant
+              CDW Technology Assistant
             </h4>
           </div>
 
