@@ -50,3 +50,8 @@ Thumbs.db
 .env.local 
 
 ui/node_modules
+
+.nfs*
+
+data-cleaning-backup-temp/
+
