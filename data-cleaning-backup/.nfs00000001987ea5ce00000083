@@ -1,0 +1,30 @@
+2025-10-28 13:22:21,376 - INFO - Loading dataset from test_dataset.csv
+2025-10-28 13:22:21,378 - INFO - Successfully loaded dataset with utf-8 encoding
+2025-10-28 13:22:21,379 - INFO - Loaded 10 rows with 34 columns
+2025-10-28 13:22:21,542 - INFO - Identifying unique products with unique images...
+2025-10-28 13:22:21,548 - INFO - Found 1 unique products
+2025-10-28 13:22:21,548 - INFO - Found 1 unique products with images
+2025-10-28 13:22:35,924 - INFO - Starting CDW Data Cleaning Pipeline...
+2025-10-28 13:22:35,924 - INFO - Loading dataset from Product_Dataset_wImages.csv
+2025-10-28 13:22:35,956 - WARNING - Failed to load with utf-8 encoding, trying next...
+2025-10-28 13:22:36,020 - INFO - Successfully loaded dataset with latin-1 encoding
+2025-10-28 13:22:36,020 - INFO - Loaded 6000 rows with 34 columns
+2025-10-28 13:22:36,021 - INFO - Starting image download process...
+2025-10-28 13:22:36,024 - INFO - Found 121 unique images to download
+2025-10-28 13:22:39,048 - INFO - Progress: 100/121 images processed
+2025-10-28 13:23:08,449 - ERROR - Failed to download https://caas.magpiehq.com/storage/assets/18533/152509a76cc80e9c4df22433bc72dd64.jpg: HTTPSConnectionPool(host='caas.magpiehq.com', port=443): Max retries exceeded with url: /storage/assets/18533/152509a76cc80e9c4df22433bc72dd64.jpg (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x1554c6c4d780>, 'Connection to caas.magpiehq.com timed out. (connect timeout=30)'))
+2025-10-28 13:23:08,450 - INFO - Image download completed!
+2025-10-28 13:23:08,450 - INFO - Download statistics: {'total_images': 121, 'downloaded': 120, 'failed': 1, 'skipped': 0}
+2025-10-28 13:23:08,451 - INFO - Updating ImageUrl column to local paths...
+2025-10-28 13:23:08,455 - INFO - Updated 3721 image URLs to local paths
+2025-10-28 13:23:08,455 - INFO - Identifying unique products with unique images...
+2025-10-28 13:23:08,461 - INFO - Found 50 unique products
+2025-10-28 13:23:08,461 - INFO - Found 43 unique products with images
+2025-10-28 13:23:08,461 - INFO - Generating analysis report...
+2025-10-28 13:23:08,466 - INFO - Saving cleaned dataset to cleaned_product_dataset.csv
+2025-10-28 13:23:08,607 - INFO - Cleaned dataset saved with 6000 rows
+2025-10-28 13:23:08,607 - INFO - Saving unique products dataset to unique_products_with_images.csv
+2025-10-28 13:23:08,609 - INFO - Unique products dataset saved with 43 rows
+2025-10-28 13:23:08,609 - INFO - Saving analysis report to data_analysis_report.json
+2025-10-28 13:23:08,610 - INFO - Analysis report saved
+2025-10-28 13:23:08,610 - INFO - Data cleaning pipeline completed successfully!

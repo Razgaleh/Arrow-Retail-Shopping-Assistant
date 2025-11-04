@@ -420,23 +420,34 @@ class CDWDataProcessor:
             # Generate realistic price
             price = self.generate_realistic_price(category, brand, self.clean_text(row['ProductName']))
             
-            # Create the embedding record
-            embedding_record = {
-                'item_name': self.clean_item_name(row['ProductName']),
-                'item_description': self.clean_text(item_description),
+            # Get subcategory
+            subcategory = self.clean_text(row.get('WebTaxonomySubLevel1Name', ''))
+            if not subcategory:
+                subcategory = self.clean_text(row.get('LogisticsTaxonomyClassName', ''))
+            if not subcategory:
+                subcategory = "General"  # Default subcategory
+            
+            # Get product URL
+            product_url = str(row.get('ItemWebPage', '')) if not pd.isna(row.get('ItemWebPage', '')) else ''
+            
+            # Create the record with new column structure
+            record = {
                 'category': self.clean_text(category),
-                'brand': self.clean_text(brand),
+                'subcategory': self.clean_text(subcategory),
+                'name': self.clean_item_name(row['ProductName']),
+                'description': self.clean_text(item_description),
+                'url': product_url,
                 'price': price,
-                'image_url': str(row['ImageUrl']) if not pd.isna(row['ImageUrl']) else ''
+                'image': str(row['ImageUrl']) if not pd.isna(row['ImageUrl']) else ''
             }
             
-            embedding_data.append(embedding_record)
+            embedding_data.append(record)
         
         # Create DataFrame
         embedding_df = pd.DataFrame(embedding_data)
         
-        # Remove duplicates based on item_name (just in case)
-        embedding_df = embedding_df.drop_duplicates(subset=['item_name'])
+        # Remove duplicates based on name (just in case)
+        embedding_df = embedding_df.drop_duplicates(subset=['name'])
         
         logger.info(f"Created {len(embedding_df)} unique products for final output")
         
@@ -448,7 +459,7 @@ class CDWDataProcessor:
         
         # Replace commas in descriptions to avoid CSV quoting issues
         df_clean = df.copy()
-        df_clean['item_description'] = df_clean['item_description'].str.replace(',', ';')
+        df_clean['description'] = df_clean['description'].str.replace(',', ';')
         df_clean.to_csv(output_file, index=False, quoting=0)
         
         logger.info(f"Final CSV saved with {len(df_clean)} rows")
