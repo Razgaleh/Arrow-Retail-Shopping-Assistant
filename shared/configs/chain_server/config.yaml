@@ -14,8 +14,8 @@ routing_prompt: |
   Routing Rules:
 
   CART OPERATIONS -> cart_node:
-  - Adding/removing items: "add this to my cart", "remove the keyboard", "grab the first item"
-  - Cart management: "what's in my cart", "clear my cart"
+  - Adding/removing items: "add this to my cart", "add [product name] to my cart", "remove the keyboard", "grab the first item", "add ESTERLINE MED ESSENTIAL 104 USB KB to my cart"
+  - Cart management: "what's in my cart", "what is in my cart right now", "show me my cart", "clear my cart"
 
   NEW PRODUCT DISCOVERY -> search:
   - Browsing categories: "show me wireless mice", "what keyboards do you have", "find Apple products"
