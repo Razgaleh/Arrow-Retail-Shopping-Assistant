@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, String, create_engine, event
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import time
@@ -11,12 +11,28 @@ import time
 DATABASE_URL = "sqlite:///./context.db"
 engine = create_engine(
     DATABASE_URL, 
-    connect_args={"check_same_thread": False},
-    pool_size=20,
-    max_overflow=40,
+    connect_args={
+        "check_same_thread": False,
+        "timeout": 20.0  # SQLite connection timeout
+    },
+    pool_size=10,
+    max_overflow=20,
     pool_pre_ping=True,
-    pool_recycle=3600
+    pool_recycle=300,  # Recycle connections every 5 minutes (was 1 hour)
+    pool_timeout=30,  # Timeout for getting connection from pool
+    echo=False
 )
+
+# Enable WAL mode for SQLite to improve performance and reduce locking
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_conn, connection_record):
+    cursor = dbapi_conn.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.execute("PRAGMA synchronous=NORMAL")
+    cursor.execute("PRAGMA cache_size=10000")
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
