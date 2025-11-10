@@ -87,7 +87,7 @@ add_to_cart_function = {
     "type": "function",
     "function": {
         "name": "add_to_cart",
-        "description": "Tool to add items to the user's cart. These items must be proper nouns from the provided context.",
+        "description": "Tool to add items to the user's cart. Use this ONLY when the user explicitly asks to ADD an item to their cart. DO NOT use this when the user asks to VIEW their cart or asks what is in their cart. These items must be proper nouns from the provided context.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -137,6 +137,6 @@ view_cart_function = {
     "type": "function",
     "function": {
         "name": "view_cart",
-        "description": "Tool to view the user's cart.",
+        "description": "Tool to view the user's cart. Use this when the user asks what is in their cart, wants to see their cart contents, or asks about items currently in their cart. DO NOT use add_to_cart when the user is asking to VIEW their cart.",
     },
 }
