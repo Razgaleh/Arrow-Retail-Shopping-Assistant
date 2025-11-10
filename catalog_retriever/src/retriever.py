@@ -614,6 +614,7 @@ class Retriever:
             return [], [], [], [], []
 
         # Filter by category - check if any user category matches any product category/subcategory
+        # If similarity is high enough (>0.6), include the result even if category doesn't match exactly
         filtered = []
         for text, id_, sim, name, img, cats in zip(final_texts, 
                                                    final_ids, 
@@ -627,11 +628,23 @@ class Retriever:
                 user_cat_lower = user_cat.lower().strip()
                 for prod_cat in cats:
                     # Check for partial match (e.g., "bag" matches "bags", "dress" matches "dresses")
+                    # Also check for keyword matches (e.g., "macbook" in "laptops 2-in-1s" context)
                     if user_cat_lower in prod_cat or prod_cat in user_cat_lower:
+                        match_found = True
+                        break
+                    # Check if product name contains keywords from user category (e.g., "macbook" in name)
+                    if any(keyword in name.lower() for keyword in user_cat_lower.split() if len(keyword) > 3):
                         match_found = True
                         break
                 if match_found:
                     break
+            
+            # If similarity is high (>0.6) and no category match, still include it
+            # This handles cases where LLM selects wrong categories but similarity is good
+            if not match_found and sim > 0.6:
+                if verbose:
+                    logging.info(f"CATALOG RETRIEVER | High similarity ({sim:.3f}) for '{name}' - including despite category mismatch")
+                match_found = True
             
             if match_found:
                 filtered.append((text, id_, sim, name, img))
