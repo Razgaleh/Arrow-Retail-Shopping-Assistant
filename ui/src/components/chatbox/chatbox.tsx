@@ -198,7 +198,10 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
   const handleSendMessage = async () => {
     if (!newMessage.trim() && !image) return;
 
-    // Stop recording if active
+    // Save the message before clearing (needed for API request)
+    const messageToSend = newMessage;
+
+    // Stop recording if active and clear all speech recognition refs
     if (isRecording && recognitionRef.current) {
       recognitionRef.current.stop();
       recognitionRef.current = null;
@@ -230,8 +233,8 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
       };
 
       // Add user message
-      if (newMessage) {
-        addMessage("user", newMessage, "");
+      if (messageToSend) {
+        addMessage("user", messageToSend, "");
       }
       if (image) {
         addMessage("user_image", previewImage, "");
@@ -239,12 +242,18 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
 
       // Add loading message
       addMessage("assistant", "loader", "");
+      
+      // Clear message input immediately and ensure speech recognition refs are cleared
       setNewMessage("");
+      // Double-check refs are cleared to prevent speech recognition from restoring text
+      interimTranscriptRef.current = '';
+      finalTranscriptRef.current = '';
+      baseMessageRef.current = '';
 
       // Prepare API request
       const payload = {
         user_id: userId,
-        query: newMessage,
+        query: messageToSend,
         guardrails: isGuardrailsOn,
         image: image || "",
         image_bool: !!image
@@ -384,6 +393,11 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
+      // Don't update if recording was stopped (recognitionRef is null)
+      if (!recognitionRef.current) {
+        return;
+      }
+
       // Process all results from the current index
       let newFinalTranscript = '';
       let newInterimTranscript = '';
@@ -408,7 +422,10 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
       }
 
       // Build message: base (from before recording) + all final transcripts + current interim
-      setNewMessage(baseMessageRef.current + finalTranscriptRef.current + interimTranscriptRef.current);
+      // Only update if we're still recording
+      if (recognitionRef.current) {
+        setNewMessage(baseMessageRef.current + finalTranscriptRef.current + interimTranscriptRef.current);
+      }
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
