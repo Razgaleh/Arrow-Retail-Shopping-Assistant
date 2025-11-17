@@ -105,16 +105,21 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-/* border:solid blue; */
   bottom: 0px;
   right: 0px;
   z-index: 9999999;
   font-family: "NVIDIA sans", sans-serif;
   font-weight: 400;
-  /* border:solid red; */
   
   height: 98.5%;
-  width: 60vw;
+  width: 100vw;
+}
+
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+  .chatbox {
+    width: 60vw;
+  }
 }
 
 /* CONTENT IS CLOSE */
@@ -122,22 +127,39 @@ html {
   display: flex;
   flex-direction: column;
   background: #f9f9f9;
-  /* width: 300px;
-  height: 300px; */
-  /* border:solid blue; */
   z-index: -9999999;
   opacity: 0;
   transition: all 0.5s ease-in-out;
-  margin-top:106px;
+  margin-top: 106px;
   margin-bottom: 7px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .chatbox__support {
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100vh;
+  }
 }
 
 /* CONTENT ISOPEN */
 .chatbox--active {
-  /* transform: translateY(-40px); */
   z-index: 9999999;
   opacity: 1;
-  height: 70%
+  height: 70%;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .chatbox--active {
+    height: calc(100vh - 117px);
+    max-height: calc(100vh - 117px);
+  }
+  
+  .chatbox {
+    height: 100vh;
+  }
 }
 
 /* BUTTON */
@@ -166,7 +188,18 @@ html {
 .chatbox__header {
   position: sticky;
   top: 0;
-  background: orange;
+  background: #ffffff;
+  z-index: 10;
+}
+
+/* Mobile header adjustments */
+@media (max-width: 767px) {
+  .chatbox__header {
+    padding: 12px 16px !important;
+    height: auto !important;
+    min-height: 60px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* MESSAGES */
@@ -212,6 +245,14 @@ html {
   padding: 0px 20px 0px 20px;
 }
 
+/* Mobile guardrail */
+@media (max-width: 767px) {
+  .chatbox__guardrail {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+  }
+}
+
 .chatbox__support {  
   background: #f9f9f9;
   /* height: 700px;
@@ -229,8 +270,6 @@ html {
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px;
-  /* border-top-left-radius: 20px;
-  border-top-right-radius: 20px; */
   background-color: #ffffff;
   height: 80px;
 }
@@ -244,6 +283,14 @@ html {
   color: #292929;
   font-weight: 500;
   font-size: 20px;
+}
+
+/* Mobile header text */
+@media (max-width: 767px) {
+  .chatbox__heading--header {
+    font-size: 16px;
+    font-weight: 600;
+  }
 }
 
 .chatbox__heading--x {
@@ -274,6 +321,14 @@ html {
   height: 100%;
 }
 
+/* Mobile messages padding */
+@media (max-width: 767px) {
+  .chatbox__messages {
+    padding: 0 12px;
+    padding-bottom: 20px;
+  }
+}
+
 .messages__item {
   margin-top: 10px;
   background: transparent;
@@ -281,7 +336,16 @@ html {
   max-width: 70%;
   font-size: 1rem;
   line-height: 1.6;
+}
 
+/* Mobile message adjustments */
+@media (max-width: 767px) {
+  .messages__item {
+    max-width: 85%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
 }
 
 .messages__item--assistant,
@@ -295,6 +359,19 @@ html {
   max-width: 70%;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+/* Mobile assistant messages */
+@media (max-width: 767px) {
+  .messages__item--assistant,
+  .messages__item--typing {
+    max-width: 85%;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
 }
 
 .messages__item--assistant--p {
@@ -407,6 +484,17 @@ html {
   background-color: rgba(118, 185, 0, 0.3);
 }
 
+/* Mobile user messages */
+@media (max-width: 767px) {
+  .messages__item--user {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+}
+
 .messages__item--image {
   margin-top: 10px;
   border-top-left-radius: 20px;
@@ -474,6 +562,19 @@ html {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   margin-top: 20px;
+  gap: 8px;
+}
+
+/* Mobile footer adjustments */
+@media (max-width: 767px) {
+  .chatbox__footer {
+    padding: 12px 12px;
+    margin-top: 0;
+    border-radius: 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 .chatbox__footer input {
@@ -483,6 +584,25 @@ html {
   border-radius: 15px;
   text-align: left;
   font-size: 1rem;
+}
+
+/* Mobile input adjustments */
+@media (max-width: 767px) {
+  .chatbox__footer input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 24px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    flex: 1;
+    min-width: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  .chatbox__footer input:focus {
+    outline: none;
+    border: 2px solid #0073ffff;
+  }
 }
 
 .chatbox__send--footer {
@@ -505,6 +625,25 @@ html {
 
 .button-class {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.button-class:active {
+  transform: scale(0.95);
+  opacity: 0.7;
+}
+
+/* Mobile button adjustments */
+@media (max-width: 767px) {
+  .button-class {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px;
+  }
 }
 
 @keyframes pulse {
@@ -517,4 +656,93 @@ html {
   100% {
     opacity: 1;
   }
+}
+
+/* Mobile image adjustments */
+@media (max-width: 767px) {
+  .messages__item--image-img {
+    width: 100%;
+    max-width: 200px;
+    border-radius: 16px;
+  }
+  
+  .messages__item--image-img-rowitem {
+    max-height: 200px;
+    border-radius: 16px;
+  }
+  
+  .messages__item--user_image {
+    max-width: 60%;
+  }
+}
+
+/* Powered by section mobile */
+@media (max-width: 767px) {
+  .chatbox__support .flex {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 10px 12px;
+  }
+  
+  .chatbox__support .flex h3 {
+    font-size: 12px !important;
+    margin: 0 4px !important;
+  }
+  
+  .chatbox__support .flex img {
+    height: 32px !important;
+    width: auto !important;
+  }
+  
+  .chatbox__support .flex img[alt="arrowlogo"] {
+    width: 60px !important;
+    height: auto !important;
+  }
+}
+
+/* Smooth scrolling for mobile */
+@media (max-width: 767px) {
+  .chatbox__messages {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (max-width: 767px) {
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  input, button, label {
+    touch-action: manipulation;
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .chatbox__messages::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .chatbox__messages::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .chatbox__messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+  
+  .chatbox__messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Hide scrollbar for categories bar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

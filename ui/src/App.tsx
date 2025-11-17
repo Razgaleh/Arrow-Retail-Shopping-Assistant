@@ -23,7 +23,11 @@ const App: React.FC = () => {
       <Apparel newRenderImage={newRenderImage} />
       <Chatbox setNewRenderImage={setNewRenderImage} />
       <Footer />
-      <ToastContainer position="top-right" />
+      <ToastContainer 
+        position="top-right"
+        className="!top-16 md:!top-4"
+        toastClassName="!text-sm md:!text-base"
+      />
     </div>
   );
 };
