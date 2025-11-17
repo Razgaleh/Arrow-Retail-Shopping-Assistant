@@ -11,7 +11,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 import logging
 import sys
 import time
@@ -86,6 +86,7 @@ class QueryRequest(BaseModel):
     retrieved: Optional[Dict[str, str]] = {}
     guardrails: Optional[bool] = True
     image_bool: bool = False
+    mode: Optional[str] = None  # 'live' for live mode optimization
 
 
 class QueryResponse(BaseModel):
@@ -93,6 +94,13 @@ class QueryResponse(BaseModel):
     response: str
     images: Dict[str, str] = {}
     timings: Dict[str, float] = {}
+
+
+class LiveQueryResponse(BaseModel):
+    """Response model for live queries."""
+    products: List[Dict[str, str]] = []
+    response: str = ""
+    query: str = ""
 
 
 def create_initial_state(request: QueryRequest) -> State:
@@ -177,6 +185,75 @@ async def process_query_timing(request: QueryRequest):
         logger.error(f"Error processing timing query: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
         
+def format_products_for_response(retrieved_dict: Dict[str, str]) -> List[Dict[str, str]]:
+    """Format retrieved products for frontend display."""
+    products = []
+    for name, image in retrieved_dict.items():
+        products.append({
+            "name": name,
+            "image": image,
+            "productUrl": image,
+            "productName": name
+        })
+    return products
+
+
+@app.post("/query/live", response_model=LiveQueryResponse)
+async def process_live_query(request: QueryRequest):
+    """
+    Process live voice + camera queries for real-time product identification.
+    Optimized for lower latency and faster responses.
+    """
+    try:
+        logger.info(f"chain-server | /query/live | Processing live query for user {request.user_id}")
+        
+        # Handle image-only queries
+        if request.image and not request.query:
+            request.query = "The user has submitted an image, and is looking for items from the catalog that appear similar."
+        
+        # Create initial state
+        state = create_initial_state(request)
+        
+        # For live mode, we can optimize by:
+        # 1. Directly routing to retriever if image is present
+        # 2. Using faster retrieval (lower k value)
+        # 3. Skipping some processing steps
+        
+        if request.image and request.image_bool:
+            # Direct retrieval for speed
+            retriever_agent = agents['retriever_agent']
+            state = await retriever_agent.invoke(state)
+            
+            # Quick response generation
+            chatter_agent = agents['chatter_agent']
+            async for chunk in chatter_agent.invoke(state):
+                pass  # Process streaming if needed
+            
+            products = format_products_for_response(state.retrieved)
+            
+            return LiveQueryResponse(
+                products=products,
+                response=state.response,
+                query=state.query
+            )
+        else:
+            # For voice-only queries, use regular flow but faster
+            # Process query and collect results
+            out_state_dict = await graph.ainvoke(state)
+            
+            products = format_products_for_response(out_state_dict.get("retrieved", {}))
+            
+            return LiveQueryResponse(
+                products=products,
+                response=out_state_dict.get("response", ""),
+                query=state.query
+            )
+            
+    except Exception as e:
+        logger.error(f"Error processing live query: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
@@ -197,6 +274,7 @@ async def root():
             "query": "/query",
             "stream": "/query/stream",
             "timing": "/query/timing",
+            "live": "/query/live",
             "health": "/health",
             "docs": "/docs"
         }

@@ -12,6 +12,7 @@ export interface AppConfig {
     endpoints: {
       query: string;
       stream: string;
+      live: string;
       health: string;
     };
   };
@@ -55,6 +56,7 @@ const getConfig = (): AppConfig => {
       endpoints: {
         query: '/query',
         stream: '/query/stream',
+        live: '/query/live',
         health: '/health',
       },
     },
