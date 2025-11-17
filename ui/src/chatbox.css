@@ -227,7 +227,7 @@ html {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 15px 20px;
   /* border-top-left-radius: 20px;
   border-top-right-radius: 20px; */
@@ -505,4 +505,16 @@ html {
 
 .button-class {
   cursor: pointer;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }

@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DownloadIcon from "@mui/icons-material/Download";
+import MicIcon from "@mui/icons-material/Mic";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -65,6 +66,11 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
   const [lastAssistantIndex, setLastAssistantIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const shownCartOperations = useRef<Set<string>>(new Set());
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const interimTranscriptRef = useRef<string>("");
+  const finalTranscriptRef = useRef<string>("");
+  const baseMessageRef = useRef<string>("");
 
   // Utility functions
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -191,6 +197,16 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() && !image) return;
+
+    // Stop recording if active
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+      setIsRecording(false);
+      interimTranscriptRef.current = '';
+      finalTranscriptRef.current = '';
+      baseMessageRef.current = '';
+    }
 
     // Clear previous cart operation notifications for new message
     shownCartOperations.current.clear();
@@ -349,7 +365,120 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     }
   };
 
+  const initializeSpeechRecognition = () => {
+    if (typeof window === 'undefined') return null;
+    
+    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast.error('Speech recognition is not supported in your browser');
+      return null;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      // Process all results from the current index
+      let newFinalTranscript = '';
+      let newInterimTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          // Add to final transcript (permanent)
+          newFinalTranscript += transcript + ' ';
+          finalTranscriptRef.current += transcript + ' ';
+          // Clear interim when we get a final result
+          interimTranscriptRef.current = '';
+        } else {
+          // This is interim (temporary)
+          newInterimTranscript += transcript;
+        }
+      }
+
+      // Update interim transcript ref
+      if (newInterimTranscript) {
+        interimTranscriptRef.current = newInterimTranscript;
+      }
+
+      // Build message: base (from before recording) + all final transcripts + current interim
+      setNewMessage(baseMessageRef.current + finalTranscriptRef.current + interimTranscriptRef.current);
+    };
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error('Speech recognition error:', event.error);
+      if (event.error === 'no-speech') {
+        // This is common when user stops speaking, don't show error
+        return;
+      }
+      if (event.error === 'not-allowed') {
+        toast.error('Microphone permission denied. Please allow microphone access.');
+      } else if (event.error === 'network') {
+        toast.error('Network error occurred during speech recognition.');
+      } else {
+        toast.error(`Speech recognition error: ${event.error}`);
+      }
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+      // Clear interim but keep final transcripts
+      interimTranscriptRef.current = '';
+    };
+
+    return recognition;
+  };
+
+  const toggleSpeechRecognition = () => {
+    if (isRecording) {
+      // Stop recording
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current = null;
+      }
+      setIsRecording(false);
+      interimTranscriptRef.current = '';
+      finalTranscriptRef.current = '';
+      baseMessageRef.current = '';
+    } else {
+      // Start recording - save the current message as base text
+      baseMessageRef.current = newMessage;
+      finalTranscriptRef.current = '';
+      interimTranscriptRef.current = '';
+      
+      // Start recording
+      const recognition = initializeSpeechRecognition();
+      if (recognition) {
+        recognitionRef.current = recognition;
+        try {
+          recognition.start();
+        } catch (error) {
+          console.error('Error starting speech recognition:', error);
+          toast.error('Failed to start speech recognition');
+          setIsRecording(false);
+        }
+      }
+    }
+  };
+
   const handleReset = async () => {
+    // Stop recording if active
+    if (isRecording && recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+      setIsRecording(false);
+      interimTranscriptRef.current = '';
+      finalTranscriptRef.current = '';
+      baseMessageRef.current = '';
+    }
+    
     setMessages([]);
     setImage("");
     setPreviewImage("");
@@ -401,13 +530,29 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     }
   }, [hasBeenOpened]);
 
+  // Cleanup: stop recording when component unmounts
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current = null;
+      }
+    };
+  }, []);
+
   return (
     <div>
       <div className="chatbox">
         <div className={`chatbox__support ${isOpen ? "chatbox--active" : ""}`}>
           {/* Header */}
-          <div className="chatbox__header">
-            <h4 className="chatbox__heading--header">
+          <div className="chatbox__header" style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            padding: '15px 20px',
+            position: 'relative'
+          }}>
+            <h4 className="chatbox__heading--header" style={{ margin: 0 }}>
               CDW Technology Assistant
             </h4>
           </div>
@@ -467,6 +612,14 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
               <SendIcon
                 sx={{ color: isLoading ? "lightgray" : "#0073ffff", cursor: isLoading ? "not-allowed" : "pointer" }}
                 onClick={isLoading ? () => {} : handleSendMessage}
+                fontSize="large"
+              />
+            </div>
+            
+            <div className="button-class">
+              <MicIcon
+                sx={{ color: isRecording ? "#ff0000" : "#0073ffff", cursor: "pointer" }}
+                onClick={toggleSpeechRecognition}
                 fontSize="large"
               />
             </div>

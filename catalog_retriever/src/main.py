@@ -134,6 +134,36 @@ async def query_image(req: ImageQueryRequest):
         "images": images
     }
 
+# Optimized image search endpoint for live camera mode
+@app.post("/query/image/fast")
+async def query_image_fast(req: ImageQueryRequest):
+    """
+    Optimized image search endpoint for live camera mode.
+    Uses lower k value and skips some processing for speed.
+    """
+    logging.info(f"CATALOG RETRIEVER | query_image_fast() | Fast image search")
+    
+    # Use lower k for faster results (max 3 for speed)
+    k = min(req.k, 3)
+    
+    texts, ids, sims, names, images = await retriever.retrieve(
+        query=req.text if req.text else ["Find similar products"],
+        image=req.image_base64,
+        categories=req.categories,
+        k=k,
+        image_bool=True,
+        verbose=False  # Less logging for speed
+    )
+    
+    return {
+        "texts": texts,
+        "ids": ids,
+        "similarities": sims,
+        "names": names,
+        "images": images,
+        "mode": "fast"
+    }
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
