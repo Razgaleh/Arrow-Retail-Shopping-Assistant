@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
           {/* <p className="text-[22px] ml-[20px] font-bold text-[#202020]">
             CDW
           </p> */}
-          <img src={logo} alt="logo" width={100} height={100} style={{ paddingLeft: "12px" }}/>
+          <img src={logo} alt="logo" className="h-8 md:h-12 w-auto" style={{ paddingLeft: "12px" }}/>
           
         </div>
         
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Categories bar */}
-      <div className="bg-[#F2F2F2] mt-[1px] h-[57px] text-white px-3 py-2 lg:px-8 flex items-center gap-4 overflow-x-auto whitespace-nowrap">
+      <div className="bg-[#F2F2F2] mt-[1px] h-[57px] text-white px-3 py-2 lg:px-8 flex items-center gap-2 md:gap-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
         {/* Hardware - Always Active */}
         <div className="flex items-center">
           <p className="text-[15px] font-medium text-[#000] underline">

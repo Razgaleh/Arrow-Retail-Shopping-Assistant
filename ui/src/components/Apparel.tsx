@@ -28,8 +28,8 @@ const Apparel: React.FC<ApparelProps> = ({ newRenderImage }) => {
 
   return (
     <div
+      className="hidden md:flex overflow-hidden items-center justify-center h-[85vh] flex-grow-1 object-contain"
       style={{ width: "40vw" }}
-      className="flex overflow-hidden items-center justify-center h-[85vh] flex-grow-1 object-contain"
     >
       <img
         src={displayImage}

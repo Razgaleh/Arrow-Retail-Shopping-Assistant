@@ -547,12 +547,12 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
           {/* Header */}
           <div className="chatbox__header" style={{ 
             display: 'flex', 
-            justifyContent: 'space-between', 
+            justifyContent: 'center', 
             alignItems: 'center',
             padding: '15px 20px',
             position: 'relative'
           }}>
-            <h4 className="chatbox__heading--header" style={{ margin: 0 }}>
+            <h4 className="chatbox__heading--header" style={{ margin: 0, textAlign: 'center', width: '100%' }}>
               CDW Technology Assistant
             </h4>
           </div>
@@ -572,10 +572,24 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
 
           {/* Footer */}
           <div className="chatbox__footer">
-             {/* Image preview */}
-             {previewImage && (
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <img src={previewImage} alt="Preview" style={{ width: '50px', height: '50px' }} />
+            {/* Image preview */}
+            {previewImage && (
+              <div style={{ 
+                position: 'relative', 
+                display: 'inline-block',
+                marginBottom: '8px',
+                width: '100%'
+              }}>
+                <img 
+                  src={previewImage} 
+                  alt="Preview" 
+                  style={{ 
+                    width: '60px', 
+                    height: '60px',
+                    borderRadius: '8px',
+                    objectFit: 'cover'
+                  }} 
+                />
                 <button
                   type="button"
                   style={{
@@ -584,69 +598,93 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
                     right: '-5px',
                     top: '-5px',
                     cursor: 'pointer',
-                    background: 'transparent',
+                    background: 'white',
                     border: 'none',
-                    padding: 0,
+                    padding: '2px',
+                    borderRadius: '50%',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                   }}
                   onClick={clearImage}
                   aria-label="Clear image"
                 >
-                  <FontAwesomeIcon icon={faTimesCircle} />
+                  <FontAwesomeIcon icon={faTimesCircle} style={{ color: '#ff0000', fontSize: '18px' }} />
                 </button>
               </div>
             )}
 
-            {/* Input field */}
-            <input
-              ref={inputRef}
-              type="text"
-              className="input_test"
-              placeholder="Type something here..."
-              value={newMessage}
-              onChange={handleNewMessageChange}
-              onKeyUp={handleKeyUp}
-            />
-
-            {/* Action buttons */}
-            <div className="button-class">
-              <SendIcon
-                sx={{ color: isLoading ? "lightgray" : "#0073ffff", cursor: isLoading ? "not-allowed" : "pointer" }}
-                onClick={isLoading ? () => {} : handleSendMessage}
-                fontSize="large"
-              />
-            </div>
-            
-            <div className="button-class">
-              <MicIcon
-                sx={{ color: isRecording ? "#ff0000" : "#0073ffff", cursor: "pointer" }}
-                onClick={toggleSpeechRecognition}
-                fontSize="large"
-              />
-            </div>
-            
-            <div className="button-class">
-              <CancelIcon
-                sx={{ color: "#0073ffff" }}
-                onClick={handleReset}
-                fontSize="large"
-              />
-            </div>
-            
-            <div className="button-class" style={{ transform: "rotate(180deg)" }}>
-              <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
-                <DownloadIcon
-                  sx={{ color: "#0073ffff" }}
-                  fontSize="large"
-                />
-              </label>
+            {/* Input and buttons container */}
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              width: '100%',
+              flexWrap: previewImage ? 'wrap' : 'nowrap'
+            }}>
+              {/* Input field */}
               <input
-                style={{ display: "none" }}
-                type="file"
-                accept="image/*"
-                id="image-upload"
-                name="image"
-                onChange={handleImageUpload}
+                ref={inputRef}
+                type="text"
+                className="input_test"
+                placeholder="Type something here..."
+                value={newMessage}
+                onChange={handleNewMessageChange}
+                onKeyUp={handleKeyUp}
+                style={{ flex: '1', minWidth: '0' }}
               />
+
+              {/* Action buttons */}
+              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                <div className="button-class">
+                  <SendIcon
+                    sx={{ 
+                      color: isLoading ? "lightgray" : "#0073ffff", 
+                      cursor: isLoading ? "not-allowed" : "pointer",
+                      fontSize: { xs: "24px", md: "28px" }
+                    }}
+                    onClick={isLoading ? () => {} : handleSendMessage}
+                  />
+                </div>
+                
+                <div className="button-class">
+                  <MicIcon
+                    sx={{ 
+                      color: isRecording ? "#ff0000" : "#0073ffff", 
+                      cursor: "pointer",
+                      fontSize: { xs: "24px", md: "28px" }
+                    }}
+                    onClick={toggleSpeechRecognition}
+                  />
+                </div>
+                
+                <div className="button-class">
+                  <CancelIcon
+                    sx={{ 
+                      color: "#0073ffff",
+                      fontSize: { xs: "24px", md: "28px" }
+                    }}
+                    onClick={handleReset}
+                  />
+                </div>
+                
+                <div className="button-class" style={{ transform: "rotate(180deg)" }}>
+                  <label htmlFor="image-upload" style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
+                    <DownloadIcon
+                      sx={{ 
+                        color: "#0073ffff",
+                        fontSize: { xs: "24px", md: "28px" }
+                      }}
+                    />
+                  </label>
+                  <input
+                    style={{ display: "none" }}
+                    type="file"
+                    accept="image/*"
+                    id="image-upload"
+                    name="image"
+                    onChange={handleImageUpload}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -666,13 +704,13 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
           </div>
 
           {/* Powered by NVIDIA */}
-          <div className="flex relative flex-row items-center justify-center bg-white pb-[15px]">
-            <h3 className="text-[16px]">Powered by</h3>
-            <img src={logo} alt="NVIDIA" className="h-14" />
-            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px" }}> x </h3>
-            <img src={cdwlogo} alt="cdwlogo" className="h-14" />
-            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", marginLeft: "12px" }}> x </h3>
-            <img src={arrowlogo} alt="arrowlogo" className="h-14" style={{width: "100px", height: "auto"}} />
+          <div className="flex relative flex-row items-center justify-center bg-white pb-[15px] pt-[10px]" style={{ flexWrap: 'wrap', gap: '4px' }}>
+            <h3 className="text-[16px]" style={{ fontSize: 'clamp(10px, 2.5vw, 16px)' }}>Powered by</h3>
+            <img src={logo} alt="NVIDIA" className="h-14" style={{ height: 'clamp(28px, 7vw, 56px)', width: 'auto' }} />
+            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", fontSize: 'clamp(10px, 2.5vw, 16px)' }}> x </h3>
+            <img src={cdwlogo} alt="cdwlogo" className="h-14" style={{ height: 'clamp(28px, 7vw, 56px)', width: 'auto' }} />
+            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", marginLeft: "12px", fontSize: 'clamp(10px, 2.5vw, 16px)' }}> x </h3>
+            <img src={arrowlogo} alt="arrowlogo" style={{width: "clamp(50px, 12vw, 100px)", height: "auto"}} />
           </div>
         </div>
 
