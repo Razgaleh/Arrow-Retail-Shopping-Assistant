@@ -33,8 +33,8 @@ const Navbar: React.FC = () => {
   };
 
   const isCategoryActive = (categoryKey: keyof typeof categories): boolean => {
-    // Only hardware is active
-    return categoryKey === 'hardware';
+    // Only electronicComponents is active
+    return categoryKey === 'electronicComponents';
   };
 
   return (
@@ -61,59 +61,52 @@ const Navbar: React.FC = () => {
 
       {/* Categories bar */}
       <div className="bg-[#F2F2F2] mt-[1px] h-[57px] text-white px-3 py-2 lg:px-8 flex items-center gap-2 md:gap-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
-        {/* Hardware - Always Active */}
+        {/* Electronic Components - Always Active */}
         <div className="flex items-center">
           <p className="text-[15px] font-medium text-[#000] underline">
-            {categories.hardware}
+            {categories.electronicComponents}
           </p>
         </div>
 
-        {/* Software */}
+        {/* Products */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.software}
+            {categories.products}
           </p>
         </div>
 
-        {/* Solutions */}
+        {/* Manufacturers */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.solutions}
+            {categories.manufacturers}
           </p>
         </div>
 
-        {/* Services */}
+        {/* Datasheets */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.services}
+            {categories.datasheets}
           </p>
         </div>
 
-        {/* Industries */}
+        {/* Reference Designs */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.industries}
+            {categories.referenceDesigns}
           </p>
         </div>
 
-        {/* Partners */}
+        {/* Verticals & Trends */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.partners}
+            {categories.verticalsTrends}
           </p>
         </div>
 
-        {/* Insights */}
+        {/* BOM Tool */}
         <div className="flex items-center hover:underline">
           <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.insights}
-          </p>
-        </div>
-
-        {/* Why CDW */}
-        <div className="flex items-center hover:underline">
-          <p className="text-[15px] text-[#666] font-medium hover:underline">
-            {categories.why}
+            {categories.bomTool}
           </p>
         </div>
       </div>
