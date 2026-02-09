@@ -21,14 +21,13 @@ export interface AppConfig {
       hardware: string;
     };
     categories: {
-      hardware: string;
-      software: string;
-      solutions: string;
-      services: string;
-      industries: string;
-      partners: string;
-      insights: string;
-      why: string;
+      electronicComponents: string;
+      products: string;
+      manufacturers: string;
+      datasheets: string;
+      referenceDesigns: string;
+      verticalsTrends: string;
+      bomTool: string;
     };
   };
   features: {
@@ -65,14 +64,13 @@ const getConfig = (): AppConfig => {
         hardware: "/images/splash.jpg",
       },
       categories: {
-        hardware: "Hardware",
-        software: "Software",
-        solutions: "Solutions",
-        services: "Services",
-        industries: "Industries",
-        partners: "Partners",
-        insights: "Insights",
-        why: "Why CDW"
+        electronicComponents: "Electronic Components",
+        products: "Products",
+        manufacturers: "Manufacturers",
+        datasheets: "Datasheets",
+        referenceDesigns: "Reference Designs",
+        verticalsTrends: "Verticals & Trends",
+        bomTool: "BOM Tool"
       }
     },
     features: {
