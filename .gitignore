@@ -47,7 +47,8 @@ Thumbs.db
 
 # Environment variables
 .env
-.env.local 
+.env.local
+keys.env
 
 ui/node_modules
 
@@ -55,3 +56,4 @@ ui/node_modules
 
 data-cleaning-backup-temp/
 
+.env 
