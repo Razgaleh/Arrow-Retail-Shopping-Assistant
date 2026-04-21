@@ -25,8 +25,8 @@ import SafeHTML from "./SafeHTML";
 import Loader from "./Loader";
 import { ChatMessageProps, MessageRole, ImageContent, ImageRowContent } from "../../types";
 import { isHardwareMode } from "../../config/config";
-import nvinfo from "../../assets/nvinfo.jpg";
-import cdwinfo from "../../assets/cdw-info.png"
+// import nvinfo from "../../assets/nvinfo.jpg";
+import arrowinfo from "../../assets/arrow_info.png"
 
 const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
   ({ role, content, productName }, ref) => {
@@ -72,7 +72,7 @@ const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
       if (content === "loader") {
         return (
           <div ref={ref} style={{ display: "inline-flex", alignItems: "flex-start", gap: 8, marginTop: 10 }}>
-            <img src={cdwinfo} alt="Assistant" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover" }} />
+            <img src={arrowinfo} alt="Assistant" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover" }} />
             <div className={`messages__item messages__item--${role}`}>
               <Loader />
             </div>
@@ -93,7 +93,7 @@ const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
 
       return (
         <div ref={ref} style={{ display: "inline-flex", alignItems: "flex-start", gap: 8, marginTop: 10 }}>
-          <img src={cdwinfo} alt="Assistant" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover" }} />
+          <img src={arrowinfo} alt="Assistant" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover" }} />
           <div className={`messages__item messages__item--${role}`}>
             <SafeHTML html={processedContent} />
           </div>

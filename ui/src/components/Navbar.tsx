@@ -22,7 +22,7 @@
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { config, isHardwareMode } from "../config/config";
-import logo from "../assets/CDW-Logo.png";
+import logo from "../assets/arrow_logo.png";
 
 const Navbar: React.FC = () => {
   const categories = config.ui.categories;
