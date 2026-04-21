@@ -32,8 +32,7 @@ import ChatMessage from "./ChatMessage";
 import { ChatboxProps } from "../../types";
 import { config } from "../../config/config";
 import { showCartNotification } from "../../utils";
-import logo from "../../assets/nvidia-logo.png";
-import cdwlogo from "../../assets/CDW-Logo.png";
+import nvidialogo from "../../assets/nvidia-logo.png";
 import arrowlogo from "../../assets/arrow_logo.png";
 
 /**
@@ -377,9 +376,15 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
   const initializeSpeechRecognition = () => {
     if (typeof window === 'undefined') return null;
     
+    // Speech Recognition requires HTTPS or localhost (secure context)
+    if (!window.isSecureContext) {
+      toast.error('Voice input requires a secure connection (HTTPS). Please open this app via HTTPS.');
+      return null;
+    }
+    
     const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      toast.error('Speech recognition is not supported in your browser');
+      toast.error('Speech recognition is not supported in your browser. Try Chrome or Edge.');
       return null;
     }
 
@@ -403,8 +408,10 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
       let newInterimTranscript = '';
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
+        const result = event.results[i];
+        if (!result.length) continue;
+        const transcript = result[0].transcript;
+        if (result.isFinal) {
           // Add to final transcript (permanent)
           newFinalTranscript += transcript + ' ';
           finalTranscriptRef.current += transcript + ' ';
@@ -513,7 +520,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     addMessage("assistant", "", "");
     
     await sleep(1000);
-    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by NVIDIA x CDW hosted on Arrow's AI Experience Center. You can ask me anything—from finding the perfect item to learning more about product features.\n\nHere are some example questions you could ask me:\n\n• Do you have any ergonomic keyboards?\n• Do you have any mice like this? (upload an image)\n• Add [product name] to my cart.\n• What is the total price of my cart?";
+    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by Arrow ECS hosted on Arrow's AI Experience Center. You can ask me anything—from finding the perfect item to learning more about product features.\n\nHere are some example questions you could ask me:\n\n• Do you have any ergonomic keyboards?\n• Do you have any mice like this? (upload an image)\n• Add [product name] to my cart.\n• What is the total price of my cart?";
     
     const words = introduction.split(" ");
     for (const word of words) {
@@ -570,7 +577,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
             position: 'relative'
           }}>
             <h4 className="chatbox__heading--header" style={{ margin: 0, textAlign: 'center', width: '100%' }}>
-              CDW Technology Assistant
+              Arrow Electronics Technology Assistant
             </h4>
           </div>
 
@@ -723,11 +730,9 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
           {/* Powered by NVIDIA */}
           <div className="flex relative flex-row items-center justify-center bg-white pb-[15px] pt-[10px]" style={{ flexWrap: 'wrap', gap: '4px' }}>
             <h3 className="text-[16px]" style={{ fontSize: 'clamp(10px, 2.5vw, 16px)' }}>Powered by</h3>
-            <img src={logo} alt="NVIDIA" className="h-14" style={{ height: 'clamp(28px, 7vw, 56px)', width: 'auto' }} />
-            <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", fontSize: 'clamp(10px, 2.5vw, 16px)' }}> x </h3>
-            <img src={cdwlogo} alt="cdwlogo" className="h-14" style={{ height: 'clamp(28px, 7vw, 56px)', width: 'auto' }} />
+            <img src={nvidialogo} alt="NVIDIA" className="h-14" style={{ height: 'clamp(28px, 7vw, 56px)', width: 'auto' }} />
             <h3 className="text-[16px]" style={{ fontWeight: "bold", marginRight: "12px", marginLeft: "12px", fontSize: 'clamp(10px, 2.5vw, 16px)' }}> x </h3>
-            <img src={arrowlogo} alt="arrowlogo" style={{width: "clamp(50px, 12vw, 100px)", height: "auto"}} />
+            <img src={arrowlogo} alt="Arrow Electronics ECS" style={{width: "clamp(50px, 12vw, 100px)", height: "auto"}} />
           </div>
         </div>
 
