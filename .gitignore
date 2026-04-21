@@ -55,5 +55,7 @@ ui/node_modules
 .nfs*
 
 data-cleaning-backup-temp/
+data-cleaning/
 
-.env 
+data_clean.ipynb
+
