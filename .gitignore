@@ -50,6 +50,10 @@ Thumbs.db
 .env.local
 keys.env
 
+# Nginx dev TLS (generate locally; never commit private keys)
+ssl/*.key
+ssl/*.crt
+
 ui/node_modules
 
 .nfs*

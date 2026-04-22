@@ -86,6 +86,8 @@ services:
     # Remove the ports section - nginx will handle external access
     # ports:
     #   - "3000:3000"
+    environment:
+      - WDS_SOCKET_PORT=3443
     volumes:
       - ./shared:/app/shared
     depends_on:

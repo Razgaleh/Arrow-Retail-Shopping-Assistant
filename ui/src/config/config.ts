@@ -17,9 +17,6 @@ export interface AppConfig {
     };
   };
   ui: {
-    defaultImages: {
-      hardware: string;
-    };
     categories: {
       electronicComponents: string;
       products: string;
@@ -60,9 +57,6 @@ const getConfig = (): AppConfig => {
       },
     },
     ui: {
-      defaultImages: {
-        hardware: "/images/splash.jpg",
-      },
       categories: {
         electronicComponents: "Electronic Components",
         products: "Products",
@@ -97,7 +91,3 @@ export const getApiUrl = (endpoint: keyof AppConfig['api']['endpoints']): string
 export const isHardwareMode = (): boolean => {
   return true; // Always return true - always fashion mode
 };
-
-export const getDefaultImage = (): string => {
-  return config.ui.defaultImages.hardware; // Always use fashion image
-}; 
