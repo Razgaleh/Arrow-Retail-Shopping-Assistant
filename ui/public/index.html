@@ -20,6 +20,43 @@
 <!-- <link rel="stylesheet" href="style.css"> -->
   <head>
     <meta charset="utf-8" />
+    <script>
+      (function () {
+        function isExtensionNoise(event) {
+          var msg = event.message || "";
+          var file = event.filename || "";
+          return (
+            msg.indexOf("Message data must be a dictionary") !== -1 ||
+            file.indexOf("inject.js") !== -1 ||
+            file.indexOf("user-script") !== -1 ||
+            file.indexOf("extension://") !== -1 ||
+            file.indexOf("moz-extension://") !== -1 ||
+            file.indexOf("chrome-extension://") !== -1 ||
+            (msg === "Script error." && !file)
+          );
+        }
+        window.addEventListener(
+          "error",
+          function (event) {
+            if (isExtensionNoise(event)) {
+              event.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            var r = event.reason;
+            var msg = r && r.message ? String(r.message) : String(r || "");
+            if (msg.indexOf("Message data must be a dictionary") !== -1) {
+              event.stopImmediatePropagation();
+            }
+          },
+          true
+        );
+      })();
+    </script>
     <link rel="icon" href="%PUBLIC_URL%/arrow_favicon.png" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />

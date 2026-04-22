@@ -21,6 +21,7 @@ import SendIcon from "@mui/icons-material/Send";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DownloadIcon from "@mui/icons-material/Download";
 import MicIcon from "@mui/icons-material/Mic";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -512,7 +513,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     // Add welcome messages
     addMessage(
       "system",
-      "You are an advanced AI assistant helps customers on a technology reseller website. You help answer questions for customers about products. Start the conversation by asking a couple of questions to clarify what the user is looking for. Use emojis but do not use too many. Structure your output using Markdown but do not use nested indentations.",
+      "You are the Arrow Electronics Assistant. You help answer questions for customers about electronics and technology products. Start the conversation by asking a couple of questions to clarify what the user is looking for. Use emojis but do not use too many. Structure your output using Markdown but do not use nested indentations.",
       ""
     );
     
@@ -520,7 +521,7 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
     addMessage("assistant", "", "");
     
     await sleep(1000);
-    const introduction = "Hello! 👋 I'm your dedicated Shopping Assistant created by Arrow ECS hosted on Arrow's AI Experience Center. You can ask me anything—from finding the perfect item to learning more about product features.\n\nHere are some example questions you could ask me:\n\n• Do you have any ergonomic keyboards?\n• Do you have any mice like this? (upload an image)\n• Add [product name] to my cart.\n• What is the total price of my cart?";
+    const introduction = "Hello! 👋 I'm your Arrow Electronics Assistant, here on Arrow's AI Experience Center. You can ask me anything—from finding the right part to learning more about product features.\n\nHere are some example questions you could ask me:\n\n• I need a plug-in power supply—like a 12V wall adapter for a small device. What do you have?\n• I'm looking for a small Wi-Fi or microcontroller kit for a hobby project—what would you suggest?\n• I have a photo of a circuit board or part—can you find something like it? (add a picture)\n• Please add the 12V power adapter to my cart.\n• What's in my cart, and what's my total?";
     
     const words = introduction.split(" ");
     for (const word of words) {
@@ -738,8 +739,8 @@ const Chatbox: React.FC<ChatboxProps> = ({ setNewRenderImage }) => {
 
         {/* Chatbox toggle button (hidden) */}
         <div className="chatbox__button" style={{ visibility: "hidden" }}>
-          <button onClick={() => setIsOpen(!isOpen)}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Chat_icon.svg/44px-Chat_icon.svg.png" alt="Chat" />
+          <button type="button" onClick={() => setIsOpen(!isOpen)} aria-label="Open chat">
+            <ChatBubbleOutlineIcon fontSize="large" />
           </button>
         </div>
       </div>

@@ -1,11 +1,11 @@
 <a id="top"></a>
-# 🛍️ NVIDIA AI Blueprint: Retail Shopping Assistant
+# 🛍️ Arrow Electronics Technology Assistant 
 
 <div align="center">
 
 ![NVIDIA Logo](https://avatars.githubusercontent.com/u/178940881?s=200&v=4)
 
-**AI-powered retail shopping assistant with multi-agent architecture**
+**Arrow Electronics Assistant — AI-powered shopping experience with multi-agent architecture (based on the NVIDIA Retail Shopping Assistant blueprint)**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
@@ -21,6 +21,7 @@
 
 - [Overview](#overview)
   - [Key Features](#key-features)
+  - [User interface](#user-interface)
   - [Architecture](#architecture)
 - [Get Started](#get-started)
   - [Prerequisites](#prerequisites)
@@ -33,17 +34,28 @@
 
 ## Overview
 
-The Retail Shopping Assistant is an AI-powered blueprint that provides a comprehensive interface for an intelligent retail shopping advisor. Built with LangGraph for agent orchestration, it features multi-agent architecture, real-time streaming responses, image-based search, and intelligent shopping cart management.
+Arrow Electronics Assistant is an AI-powered application that provides a comprehensive interface for an intelligent electronics and technology shopping advisor. Built with LangGraph for agent orchestration, it features multi-agent architecture, real-time streaming responses, image-based search, and intelligent shopping cart management.
 
 ### Key Features
 
 - 🤖 **Intelligent Product Search**: Find products using natural language or images
 - 🛒 **Smart Cart Management**: Add, remove, and manage shopping cart items
 - 🖼️ **Visual Search**: Upload images to find similar products
+- 🎙️ **Voice Assistant**: Dictate questions with the in-browser microphone (Web Speech API). Requires a **secure context**—use HTTPS (e.g. `https://<host>:3443` behind nginx); Chrome and Edge generally work best.
 - 💬 **Conversational AI**: Natural language interactions
 - 🔒 **Content Safety**: Built-in moderation and safety checks
 - ⚡ **Real-time Streaming**: Live response generation
-- 📱 **Responsive UI**: Modern, mobile-friendly interface
+- 📱 **Mobile UI**: Responsive, touch-friendly layout for phones and tablets
+
+### User interface
+
+**Desktop** — Hero panel with **Talk to the AI Assistant**, category shortcuts, and the chat experience (voice, image upload, Guardrails toggle, and **Powered by NVIDIA × ARROW** branding).
+
+![Arrow Electronics Assistant: desktop hero panel and chat](./assets/ui-desktop-hero-chat.png)
+
+**Mobile UI** — Same assistant on a narrow viewport: touch-friendly chat, mic, and controls.
+
+![Arrow Electronics Assistant: mobile UI](./assets/ui-mobile.png)
 
 ### Architecture
 
@@ -80,7 +92,7 @@ For detailed architecture information, see [Architecture Overview](docs/README.m
    ```
    Use `$oauthtoken` as the username and your NGC API key as the password.
 
-3. **Set up environment**:
+3. **Set up environment** (copy `.env.example` to `.env`, fill in keys, then `source .env`, or export manually):
    ```bash
    export NGC_API_KEY=your_nvapi_key_here
    export LLM_API_KEY=$NGC_API_KEY
@@ -91,7 +103,15 @@ For detailed architecture information, see [Architecture Overview](docs/README.m
    chmod a+w "$LOCAL_NIM_CACHE"
    ```
 
-4. **Launch the application**:
+4. **TLS for nginx (HTTPS / microphone)**: Self-signed certs are not committed. Generate once before the first `docker compose` that starts `nginx`:
+   ```bash
+   mkdir -p ssl
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+     -keyout ssl/nginx-selfsigned.key -out ssl/nginx-selfsigned.crt \
+     -subj "/CN=localhost"
+   ```
+
+5. **Launch the application**:
    
    **Option A: Local Deployment**:
    ```bash
@@ -111,9 +131,9 @@ For detailed architecture information, see [Architecture Overview](docs/README.m
    docker compose -f docker-compose.yaml up -d --build
    ```
 
-5. **Access the application**: Open your browser to `http://localhost:3000`
+6. **Access the application**: Open your browser to `http://localhost:3000` (HTTPS with voice features: `https://localhost:3443` if nginx is enabled).
 
-6. **Stop the containers**:
+7. **Stop the containers**:
    
    **Option A: Local Deployment**:
    ```bash

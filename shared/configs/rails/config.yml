@@ -17,7 +17,7 @@ models:
 
 bot_messages:
   refuse to respond: 
-    - "Sorry, I am a CDW shopping assistant and can only help you with your technology shopping needs."
+    - "Sorry, I am an Arrow Electronics Assistant and can only help you with your technology shopping needs."
 
 rails:
   input:

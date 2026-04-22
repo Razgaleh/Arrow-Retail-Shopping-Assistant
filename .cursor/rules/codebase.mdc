@@ -398,7 +398,7 @@ CREATE TABLE cart_items (
 
 ### Product Catalog
 
-Products are stored in CSV format (`/shared/data/products.csv`):
+Products are stored in CSV format (`/shared/data/electronics_components.csv`):
 ```csv
 category,subcategory,name,description,url,price,image
 accessories,bag,Classic Black Patent Leather Purse,"Description...",/images/...,49.9,/images/...
@@ -487,7 +487,7 @@ docker compose -f docker-compose.yaml up -d --build
 **Configuration**:
 - `shared/configs/chain_server/config.yaml`: Main config
 - `shared/configs/catalog_retriever/config.yaml`: Search config
-- `shared/data/products.csv`: Product catalog
+- `shared/data/electronics_components.csv`: Product catalog
 
 ### File Organization
 

@@ -12,8 +12,8 @@ LLM_NAME = "nvdev/meta/llama-3.1-70b-instruct"
 #LLM_NAME = "nvdev/nv-mistralai/mistral-nemo-12b-instruct"
 EMBED_NAME = "nvdev/nvidia/nv-embedqa-e5-v5"
 LLM_CLIENT = OpenAI(
-    base_url= "https://integrate.api.nvidia.com/v1", #"http://pdx-tme-018:8000/v1", #"https://integrate.api.nvidia.com/v1",
-    api_key=os.environ["NVIDIA_API_KEY"]
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.environ["NVIDIA_API_KEY"],
 )
 EMBED_CLIENT = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
