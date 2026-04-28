@@ -53,6 +53,10 @@ Arrow Electronics Assistant is an AI-powered application that provides a compreh
 
 ![Arrow Electronics Assistant: desktop hero panel and chat](./assets/ui-desktop-hero-chat.png)
 
+**Desktop example** — Conversation in the chat panel (product recommendations and follow-up).
+
+![Arrow Electronics Assistant: desktop chat example](./assets/ui-desktop-hero-chat-example.png)
+
 **Mobile UI** — Same assistant on a narrow viewport: touch-friendly chat, mic, and controls.
 
 ![Arrow Electronics Assistant: mobile UI](./assets/ui-mobile.png)
