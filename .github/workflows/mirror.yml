@@ -1,0 +1,25 @@
+# Mirrors this fork to Arrow/Arrow-Retail-Shopping-Assistant on push/delete (same pattern as
+# Razgaleh/Arrow-NetApp-Enterprise-RAG). Add repo secret MIRROR_TOKEN: a PAT with repo scope
+# and push permission to the org repo (or org deploy key workflow as appropriate).
+
+name: Mirror to Arrow GitHub Organization
+
+on: [push, delete]
+
+jobs:
+  git-mirror:
+    if: github.repository == 'Razgaleh/Arrow-Retail-Shopping-Assistant'
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Mirror to Target
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/Arrow/Arrow-Retail-Shopping-Assistant.git
